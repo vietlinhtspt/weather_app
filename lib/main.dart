@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:weather_app/pages/gradientIcon.dart';
 import 'package:weather_app/pages/home_page.dart';
 import 'package:weather_app/pages/search_page.dart';
+import 'package:weather_app/pages/setting_page.dart';
 import 'package:weather_app/theme.dart';
 
 void main() {
@@ -35,10 +36,7 @@ class _MainPageState extends State<MainPage> {
   static const List<Widget> _widgetOptions = <Widget>[
     HomePage(),
     SearchPage(),
-    Text(
-      'Index 3: Option Page',
-      style: optionStyle,
-    ),
+    SettingPage(),
   ];
 
   void _onItemTapped(int index) {
