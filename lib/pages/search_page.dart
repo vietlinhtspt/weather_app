@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:weather_app/pages/detail_info_item.dart';
-import 'package:weather_app/pages/gradientIcon.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:weather_app/blocs/weather_bloc.dart';
+import 'package:weather_app/blocs/weather_search_bloc.dart';
 import 'package:weather_app/pages/searchBar.dart';
+import 'package:weather_app/pages/suggestItem.dart';
+import 'package:weather_app/states/weather_search_state.dart';
+import 'package:weather_app/states/weather_state.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({Key key}) : super(key: key);
@@ -14,72 +18,54 @@ class _SearchPageState extends State<SearchPage> {
   final TextEditingController _cityTextController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Column(
-        children: [
-          SearchBar(cityTextController: _cityTextController),
-          Container(
-            padding: EdgeInsets.symmetric(vertical: 7, horizontal: 15),
-            width: 180,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                color: Theme.of(context).cardColor),
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "22°",
-                    style: Theme.of(context).textTheme.headline5,
+    return BlocBuilder<WeatherSearchBloc, WeatherState>(
+        builder: (context, weatherState) {
+      return SafeArea(
+        child: Column(
+          children: [
+            SearchBar(cityTextController: _cityTextController),
+            // SuggestItem()
+            (() {
+              if (weatherState is WeatherStateSearchInitial) {
+                return Expanded(
+                  child: Center(
+                      child: Text('Do you want search a location?',
+                          style: TextStyle(fontSize: 20))),
+                );
+              }
+              if (weatherState is WeatherStateSearchLoading) {
+                return Center(child: CircularProgressIndicator());
+              }
+              // your code here
+              if (weatherState is WeatherStateSearchSuccess) {
+                final weathers = weatherState.weathers;
+
+                return Expanded(
+                  child: Container(
+                    margin: EdgeInsets.only(top: 20, left: 20, right: 20),
+                    child: GridView.builder(
+                        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                            maxCrossAxisExtent: 200,
+                            childAspectRatio: 0.9 / 1,
+                            crossAxisSpacing: 20,
+                            mainAxisSpacing: 20),
+                        itemCount: weathers.length,
+                        itemBuilder: (BuildContext ctx, index) {
+                          return SuggestItem(
+                            weather: weathers[index],
+                          );
+                        }),
                   ),
-                  GradientIcon(
-                      icon: Icon(
-                    Icons.cloud,
-                    size: 50,
-                  ))
-                ],
-              ),
-              Text(
-                "Austin",
-                style: Theme.of(context).textTheme.headline5,
-              ),
-              Text(
-                "USA",
-                style: Theme.of(context)
-                    .textTheme
-                    .headline6
-                    .copyWith(color: Colors.blueGrey[600]),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  DetailInfoItem(
-                    icon: Icon(
-                      Icons.grain,
-                      size: 17,
-                      color: Colors.blueGrey[600],
-                    ),
-                    title: "17%",
-                    fontSize: 14,
-                    margin: EdgeInsets.only(right: 5),
-                  ),
-                  DetailInfoItem(
-                    icon: Icon(
-                      Icons.stacked_line_chart,
-                      size: 14,
-                      color: Colors.blueGrey[600],
-                    ),
-                    title: "7km/h",
-                    fontSize: 14,
-                    margin: EdgeInsets.only(right: 5),
-                  )
-                ],
-              )
-            ]),
-          )
-        ],
-      ),
-    );
+                );
+              }
+              return Text(
+                'Something went wrong',
+                style: TextStyle(color: Colors.redAccent, fontSize: 16),
+              );
+            }())
+          ],
+        ),
+      );
+    });
   }
 }
