@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:weather_app/blocs/weather_bloc.dart';
+import 'package:weather_app/events/weather_event.dart';
 import 'package:weather_app/main.dart';
 import 'package:weather_app/models/weather_model.dart';
 import 'package:weather_app/pages/gradientIcon.dart';
@@ -18,6 +19,8 @@ class SuggestItem extends StatelessWidget {
     return InkWell(
       onTap: () {
         BlocProvider.of<WeatherBloc>(context).changeTabController.add(0);
+        BlocProvider.of<WeatherBloc>(context)
+            .add(WeatherEventSet(weather: this.weather));
       },
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 7, horizontal: 15),

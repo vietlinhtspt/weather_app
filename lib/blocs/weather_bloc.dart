@@ -33,6 +33,8 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
       } catch (e) {
         yield WeatherStateFailure();
       }
+    } else if (event is WeatherEventSet) {
+      yield WeatherStateSuccess(weather: event.weather);
     }
   }
 

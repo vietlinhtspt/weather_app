@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:weather_app/models/weather_model.dart';
 
 abstract class WeatherEvent extends Equatable {
   const WeatherEvent();
@@ -24,4 +25,11 @@ class WeatherEventSearch extends WeatherEvent {
   const WeatherEventSearch({@required this.city});
   @override
   List<Object> get props => [city];
+}
+
+class WeatherEventSet extends WeatherEvent {
+  final Weather weather;
+  const WeatherEventSet({@required this.weather});
+  @override
+  List<Object> get props => [weather];
 }

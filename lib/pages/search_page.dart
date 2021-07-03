@@ -34,7 +34,9 @@ class _SearchPageState extends State<SearchPage> {
                 );
               }
               if (weatherState is WeatherStateSearchLoading) {
-                return Center(child: CircularProgressIndicator());
+                return SizedBox(
+                    height: 100,
+                    child: Center(child: CircularProgressIndicator()));
               }
               // your code here
               if (weatherState is WeatherStateSearchSuccess) {

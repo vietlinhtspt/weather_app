@@ -1,11 +1,8 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:weather_app/blocs/bloc_observer.dart';
 import 'package:weather_app/blocs/weather_bloc.dart';
 import 'package:weather_app/blocs/weather_search_bloc.dart';
-import 'package:weather_app/models/weather_model.dart';
 import 'package:weather_app/pages/gradientIcon.dart';
 import 'package:weather_app/pages/home_page.dart';
 import 'package:weather_app/pages/search_page.dart';
@@ -61,7 +58,6 @@ class _MainPageState extends State<MainPage> {
   void initState() {
     super.initState();
     _weatherBloc = BlocProvider.of<WeatherBloc>(context);
-    
   }
 
   @override

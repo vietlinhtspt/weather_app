@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:weather_app/models/weather_model.dart';
 
 class MainInfo extends StatelessWidget {
-  const MainInfo({
-    Key key,
-  }) : super(key: key);
+  final Weather weather;
+  const MainInfo({Key key, @required this.weather}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -14,11 +14,11 @@ class MainInfo extends StatelessWidget {
         children: [
           SizedBox(height: 80),
           Text(
-            "San Fransisco",
+            this.weather.location,
             style: Theme.of(context).textTheme.headline6,
           ),
           Text(
-            "18°",
+            "${this.weather.temp.round().toString()}°",
             style: Theme.of(context).textTheme.headline5.copyWith(fontSize: 60),
           ),
           Container(
@@ -27,7 +27,7 @@ class MainInfo extends StatelessWidget {
                 color: Colors.deepPurple[900],
                 borderRadius: BorderRadius.circular(20)),
             child: Text(
-              "Cloudy",
+              this.weather.formattedCondition,
               style: TextStyle(fontSize: 15, color: Colors.white),
             ),
           )

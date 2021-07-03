@@ -27,6 +27,7 @@ class Weather extends Equatable {
   final String location;
   final int humidity;
   final String timezone;
+  final double airPressure;
   //constructor
   const Weather(
       {this.weatherCondition,
@@ -40,7 +41,8 @@ class Weather extends Equatable {
       this.lastUpdated,
       this.location,
       this.humidity,
-      this.timezone});
+      this.timezone,
+      this.airPressure});
   @override
   // TODO: implement props
   List<Object> get props => [
@@ -55,7 +57,8 @@ class Weather extends Equatable {
         lastUpdated,
         location,
         humidity,
-        timezone
+        timezone,
+        airPressure,
       ];
   //convert from JSON to Weather object
 /*
@@ -81,6 +84,7 @@ consolidated_weather": [
  */
   factory Weather.fromJson(dynamic jsonObject) {
     final consolidatedWeather = jsonObject['consolidated_weather'][0];
+
     return Weather(
         weatherCondition: _mapStringToWeatherCondition(
                 consolidatedWeather['weather_state_abbr']) ??
@@ -94,6 +98,7 @@ consolidated_weather": [
         created: consolidatedWeather['created'],
         lastUpdated: DateTime.now(),
         location: jsonObject['title'],
+        airPressure: consolidatedWeather['air_pressure'] as double,
         windSpeed: consolidatedWeather['wind_speed'] as double,
         humidity: consolidatedWeather['humidity'],
         timezone: jsonObject["timezone"].split("/")[0]);
