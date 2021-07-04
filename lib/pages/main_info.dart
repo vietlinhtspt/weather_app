@@ -17,20 +17,39 @@ class MainInfo extends StatelessWidget {
             this.weather.location,
             style: Theme.of(context).textTheme.headline6,
           ),
-          Text(
-            "${this.weather.temp.round().toString()}°",
-            style: Theme.of(context).textTheme.headline5.copyWith(fontSize: 60),
-          ),
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 7),
-            decoration: BoxDecoration(
-                color: Colors.deepPurple[900],
-                borderRadius: BorderRadius.circular(20)),
-            child: Text(
-              this.weather.formattedCondition,
-              style: TextStyle(fontSize: 15, color: Colors.white),
-            ),
-          )
+          (() {
+            // your code here
+            if (this.weather.temp != null) {
+              return Text(
+                "${this.weather.temp.round().toString()}°",
+                style: Theme.of(context)
+                    .textTheme
+                    .headline5
+                    .copyWith(fontSize: 60),
+              );
+            } else {
+              return SizedBox(
+                  width: 20, height: 20, child: CircularProgressIndicator());
+            }
+          }()),
+          (() {
+            // your code here
+            if (this.weather.formattedCondition != null) {
+              return Container(
+                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+                decoration: BoxDecoration(
+                    color: Colors.deepPurple[900],
+                    borderRadius: BorderRadius.circular(20)),
+                child: Text(
+                  this.weather.formattedCondition,
+                  style: TextStyle(fontSize: 15, color: Colors.white),
+                ),
+              );
+            } else {
+              return SizedBox(
+                  width: 20, height: 20, child: CircularProgressIndicator());
+            }
+          }()),
         ],
       ),
     );

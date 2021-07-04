@@ -1,11 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:weather_app/blocs/weather_bloc.dart';
 import 'package:weather_app/events/weather_event.dart';
-import 'package:weather_app/main.dart';
 import 'package:weather_app/models/weather_model.dart';
 import 'package:weather_app/pages/gradientIcon.dart';
-import 'package:weather_app/pages/home_page.dart';
 
 import 'detail_info_item.dart';
 
@@ -17,10 +17,18 @@ class SuggestItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
+      onTap: () async {
         BlocProvider.of<WeatherBloc>(context).changeTabController.add(0);
         BlocProvider.of<WeatherBloc>(context)
             .add(WeatherEventSet(weather: this.weather));
+        // while (this.weather.windSpeed == null) {
+        //   sleep(Duration(milliseconds: 250));
+        //   if (this.weather.windSpeed != null) {
+        //     BlocProvider.of<WeatherBloc>(context)
+        //         .add(WeatherEventSet(weather: this.weather));
+        //     print("Reload");
+        //   }
+        // }
       },
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 7, horizontal: 15),
@@ -34,6 +42,7 @@ class SuggestItem extends StatelessWidget {
             children: [
               (() {
                 // your code here
+
                 if (this.weather.temp != null) {
                   return Text(
                     "${this.weather.temp.round()}°C",

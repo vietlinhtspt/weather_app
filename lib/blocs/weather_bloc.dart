@@ -35,6 +35,11 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
       }
     } else if (event is WeatherEventSet) {
       yield WeatherStateSuccess(weather: event.weather);
+      if (event.weather.humidity == null) {
+        Weather weather =
+            await weatherServices.fetchWeather(event.weather.locationId);
+        yield WeatherStateSuccess(weather: weather);
+      }
     }
   }
 
