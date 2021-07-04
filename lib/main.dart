@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:weather_app/blocs/bloc_observer.dart';
 import 'package:weather_app/blocs/weather_bloc.dart';
+import 'package:weather_app/blocs/weather_user_bloc.dart';
 import 'package:weather_app/blocs/weather_search_bloc.dart';
 import 'package:weather_app/pages/gradientIcon.dart';
 import 'package:weather_app/pages/home_page.dart';
@@ -31,7 +32,11 @@ class MyApp extends StatelessWidget {
             create: (context) => WeatherBloc(weatherServices: weatherServices)),
         BlocProvider<WeatherSearchBloc>(
             create: (context) =>
-                WeatherSearchBloc(weatherServices: weatherServices))
+                WeatherSearchBloc(weatherServices: weatherServices)),
+        BlocProvider<WeatherUserBloc>(
+          create: (context) =>
+              WeatherUserBloc(weatherServices: weatherServices),
+        )
       ], child: MainPage()),
     );
   }
@@ -48,7 +53,7 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
-  static const List<Widget> _widgetOptions = <Widget>[
+  List<Widget> _widgetOptions = <Widget>[
     HomePage(),
     SearchPage(),
     SettingPage(),
