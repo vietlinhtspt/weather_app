@@ -50,6 +50,7 @@ class _HomePageState extends State<HomePage> {
               child: Stack(children: [
                 WeatherPicture(),
                 SingleChildScrollView(
+                  physics: BouncingScrollPhysics(),
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
