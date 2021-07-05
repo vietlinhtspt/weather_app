@@ -98,7 +98,7 @@ class _SettingPageState extends State<SettingPage> {
                             long: this.locationData.longitude.toDouble()));
                   }
                   return SizedBox(
-                    height: 400,
+                    height: 424,
                     child: Expanded(
                       child: Center(
                         child: Text("Finding your location..."),
@@ -107,7 +107,7 @@ class _SettingPageState extends State<SettingPage> {
                   );
                 } else if (weatherUserState is WeatherStateLoading) {
                   return SizedBox(
-                      height: 400,
+                      height: 424,
                       child: Center(child: CircularProgressIndicator()));
                 } else {
                   return Text(

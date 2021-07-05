@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:weather_app/blocs/setting_bloc.dart';
 import 'package:weather_app/blocs/weather_bloc.dart';
+import 'package:weather_app/models/setting_model.dart';
+import 'package:weather_app/models/weather_model.dart';
 import 'package:weather_app/pages/detail_info.dart';
 import 'package:weather_app/pages/gradient_icon.dart';
 import 'package:weather_app/pages/main_info.dart';
@@ -19,16 +21,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final List<String> weekInfo = [
-    "Monday",
-    "Tueday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-    "Sunday"
-  ];
-
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<WeatherBloc, WeatherState>(
@@ -76,50 +68,23 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ),
                         TodayInfo(),
-                        Column(
-                          children: this.weekInfo.map((item) {
-                            return Container(
-                              margin: EdgeInsets.symmetric(
-                                  vertical: 10, horizontal: 19),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Container(
-                                    width: 150,
-                                    child: Text(
-                                      item,
-                                      style:
-                                          Theme.of(context).textTheme.headline5,
-                                    ),
-                                  ),
-                                  GradientIcon(icon: Icon(Icons.circle)),
-                                  Container(
-                                    child: Row(
-                                      children: [
-                                        Container(
-                                            margin: EdgeInsets.symmetric(
-                                                horizontal: 10),
-                                            child: Text(
-                                              "19°",
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .headline5,
-                                            )),
-                                        Text(
-                                          "15°",
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .headline6,
-                                        )
-                                      ],
-                                    ),
-                                  )
-                                ],
-                              ),
-                            );
-                          }).toList(),
-                        )
+                        (() {
+                          if (weatherState.weather.futureWeathers != null) {
+                            return Column(
+                                children: weatherState.weather.futureWeathers
+                                    .map((weekWeatherItem) {
+                              return WeekItemInfo(
+                                futureWeather: weekWeatherItem,
+                                setting: settingState.setting,
+                              );
+                            }).toList());
+                          } else {
+                            return SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator());
+                          }
+                        }())
                       ]),
                 )
               ]),
@@ -132,5 +97,75 @@ class _HomePageState extends State<HomePage> {
         style: TextStyle(color: Colors.redAccent, fontSize: 16),
       );
     });
+  }
+}
+
+class WeekItemInfo extends StatelessWidget {
+  final List<String> days = [
+    "Monday",
+    "Tueday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+    "Sunday"
+  ];
+  final FutureWeather futureWeather;
+  final Setting setting;
+  WeekItemInfo({Key key, this.futureWeather, this.setting}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 10, horizontal: 19),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Container(
+            width: 150,
+            child: Text(
+              this.days[this.futureWeather.dateTime.weekday - 1],
+              style: Theme.of(context).textTheme.headline5,
+            ),
+          ),
+          (() {
+            // your code here
+            if (this.futureWeather.formattedCondition != null) {
+              return Container(
+                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+                decoration: BoxDecoration(
+                    color: Colors.deepPurple[900],
+                    borderRadius: BorderRadius.circular(20)),
+                child: Text(
+                  this.futureWeather.formattedCondition,
+                  style: TextStyle(fontSize: 11, color: Colors.white),
+                ),
+              );
+            } else {
+              return SizedBox(
+                  width: 20, height: 20, child: CircularProgressIndicator());
+            }
+          }()),
+          Container(
+            child: Row(
+              children: [
+                Container(
+                    margin: EdgeInsets.symmetric(horizontal: 10),
+                    child: Text(
+                      formatedTemperature(this.futureWeather.maxTemp.round(),
+                          this.setting.temperatureMeansure),
+                      style: Theme.of(context).textTheme.headline5,
+                    )),
+                Text(
+                  formatedTemperature(this.futureWeather.minTemp.round(),
+                      this.setting.temperatureMeansure),
+                  style: Theme.of(context).textTheme.headline6,
+                )
+              ],
+            ),
+          )
+        ],
+      ),
+    );
   }
 }

@@ -14,6 +14,20 @@ enum WeatherCondition {
   unknown
 }
 
+class FutureWeather {
+  final DateTime dateTime;
+  final String formattedCondition;
+  final WeatherCondition weatherCondition;
+  final double minTemp;
+  final double maxTemp;
+  const FutureWeather(
+      {this.dateTime,
+      this.formattedCondition,
+      this.weatherCondition,
+      this.maxTemp,
+      this.minTemp});
+}
+
 class Weather extends Equatable {
   final WeatherCondition weatherCondition;
   final String formattedCondition;
@@ -28,6 +42,8 @@ class Weather extends Equatable {
   final int humidity;
   final String timezone;
   final double airPressure;
+  final List<FutureWeather> futureWeathers;
+
   //constructor
   const Weather(
       {this.weatherCondition,
@@ -42,9 +58,9 @@ class Weather extends Equatable {
       this.location,
       this.humidity,
       this.timezone,
-      this.airPressure});
+      this.airPressure,
+      this.futureWeathers});
   @override
-  
   List<Object> get props => [
         weatherCondition,
         formattedCondition,
@@ -59,6 +75,7 @@ class Weather extends Equatable {
         humidity,
         timezone,
         airPressure,
+        futureWeathers
       ];
   //convert from JSON to Weather object
 /*
@@ -84,28 +101,53 @@ consolidated_weather": [
  */
   factory Weather.fromJson(dynamic jsonObject) {
     final consolidatedWeather = jsonObject['consolidated_weather'][0];
+    final futureWeathers = getFutureWeathers(jsonObject);
 
     return Weather(
-        weatherCondition: _mapStringToWeatherCondition(
-                consolidatedWeather['weather_state_abbr']) ??
-            '',
-        formattedCondition: consolidatedWeather['weather_state_name'] ?? '',
-        minTemp: consolidatedWeather['min_temp'] as double,
-        temp: consolidatedWeather['the_temp'] as double,
-        maxTemp: consolidatedWeather['max_temp'] as double,
-        locationId:
-            jsonObject['woeid'] as int, //Where On Earth Identifier = woeid
-        created: consolidatedWeather['created'],
-        lastUpdated: DateTime.now(),
-        location: jsonObject['title'],
-        airPressure: consolidatedWeather['air_pressure'] as double,
-        windSpeed: consolidatedWeather['wind_speed'] as double,
-        humidity: consolidatedWeather['humidity'],
-        timezone: jsonObject["timezone"].split("/")[0]);
+      weatherCondition: _mapStringToWeatherCondition(
+              consolidatedWeather['weather_state_abbr']) ??
+          '',
+      formattedCondition: consolidatedWeather['weather_state_name'] ?? '',
+      minTemp: consolidatedWeather['min_temp'] as double,
+      temp: consolidatedWeather['the_temp'] as double,
+      maxTemp: consolidatedWeather['max_temp'] as double,
+      locationId:
+          jsonObject['woeid'] as int, //Where On Earth Identifier = woeid
+      created: consolidatedWeather['created'],
+      lastUpdated: DateTime.now(),
+      location: jsonObject['title'],
+      airPressure: consolidatedWeather['air_pressure'] as double,
+      windSpeed: consolidatedWeather['wind_speed'] as double,
+      humidity: consolidatedWeather['humidity'],
+      timezone: jsonObject["timezone"].split("/")[0],
+      futureWeathers: futureWeathers,
+    );
   }
 
   factory Weather.fromSearchResult(Map item) {
     return Weather(locationId: item['woeid'] as int, location: item['title']);
+  }
+
+  static List<FutureWeather> getFutureWeathers(dynamic jsonObject) {
+    final List<FutureWeather> futureWeathers = List<FutureWeather>();
+    for (var consolidatedWeather in jsonObject['consolidated_weather']) {
+      var dateTimes = consolidatedWeather["applicable_date"].split("-");
+      futureWeathers.add(
+        FutureWeather(
+          dateTime: DateTime.utc(int.parse(dateTimes[0]),
+              int.parse(dateTimes[1]), int.parse(dateTimes[2])),
+          weatherCondition: _mapStringToWeatherCondition(
+                  consolidatedWeather['weather_state_abbr']) ??
+              '',
+          formattedCondition: consolidatedWeather['weather_state_name'] ?? '',
+          minTemp: consolidatedWeather['min_temp'] as double,
+          maxTemp: consolidatedWeather['max_temp'] as double,
+        ),
+      );
+
+      // print(consolidatedWeather["applicable_date"].split());
+    }
+    return futureWeathers;
   }
 
   static WeatherCondition _mapStringToWeatherCondition(String inputString) {
