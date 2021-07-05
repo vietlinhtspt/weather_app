@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:weather_app/models/setting_model.dart';
 import 'package:weather_app/models/weather_model.dart';
 import 'package:weather_app/pages/detail_info.dart';
 import 'package:weather_app/pages/gradientIcon.dart';
 import 'package:weather_app/pages/user_location.dart';
+import 'package:weather_app/models/setting_model.dart';
 
 class WeatherUserInfo extends StatelessWidget {
   final Weather weather;
-  const WeatherUserInfo({Key key, @required this.weather})
+  final Setting setting;
+  const WeatherUserInfo(
+      {Key key, @required this.weather, @required this.setting})
       : assert(weather != null),
+        assert(setting != null),
         super(key: key);
 
   @override
@@ -37,12 +42,14 @@ class WeatherUserInfo extends StatelessWidget {
         Container(
           margin: EdgeInsets.symmetric(vertical: 15),
           child: Text(
-            "${this.weather.temp.round()}°C",
+            formatedTemperature(
+                this.weather.temp.round(), this.setting.temperatureMeansure),
             style: Theme.of(context).textTheme.headline5.copyWith(fontSize: 50),
           ),
         ),
         DetailInfo(
           weather: weather,
+          setting: setting
         )
       ],
     );

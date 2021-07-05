@@ -84,7 +84,11 @@ class _SettingPageState extends State<SettingPage> {
             children: [
               (() {
                 if (weatherUserState is WeatherStateSuccess) {
-                  return WeatherUserInfo(weather: weatherUserState.weather);
+                  return BlocBuilder<SettingBloc, SettingState>(
+                    builder: (context, settingState) {
+                      return WeatherUserInfo(weather: weatherUserState.weather, setting: settingState.setting);
+                    },
+                  );
                 } else if (weatherUserState is WeatherStateInitial) {
                   // Future<LocationData> locationData = widget.getLocation();
                   // setState(() {

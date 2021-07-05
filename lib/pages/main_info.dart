@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:weather_app/models/setting_model.dart';
 import 'package:weather_app/models/weather_model.dart';
 
 class MainInfo extends StatelessWidget {
   final Weather weather;
-  const MainInfo({Key key, @required this.weather}) : super(key: key);
+  final Setting setting;
+  const MainInfo({Key key, @required this.weather, @required this.setting})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +24,8 @@ class MainInfo extends StatelessWidget {
             // your code here
             if (this.weather.temp != null) {
               return Text(
-                "${this.weather.temp.round().toString()}°",
+                formatedTemperature(this.weather.temp.round(),
+                    this.setting.temperatureMeansure),
                 style: Theme.of(context)
                     .textTheme
                     .headline5

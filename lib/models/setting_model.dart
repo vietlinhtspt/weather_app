@@ -18,6 +18,26 @@ var formatedSourceDataMeansure = {
   SourceDataMeansure.weatherDotgov: "weather.gov"
 };
 
+final standardizeTemperature =
+    (int temp, TemperatureMeansure temperatureMeansure) =>
+        temperatureMeansure == TemperatureMeansure.celcius
+            ? temp
+            : (temp * 1.8 + 32).round();
+
+final standardizeWindSpeed =
+    (int windSpeed, WindSpeedMeansure windSpeedMeansure) =>
+        windSpeedMeansure == WindSpeedMeansure.kmPerS
+            ? windSpeed
+            : (windSpeed * 1000 / 3600).round();
+
+final formatedTemperature = (int temp,
+        TemperatureMeansure temperatureMeansure) =>
+    "${standardizeTemperature(temp, temperatureMeansure)}${temperatureMeansure == TemperatureMeansure.celcius ? '°C' : '°F'}";
+
+final formatedWindSpeed = (int windSpeed,
+        WindSpeedMeansure windSpeedMeansure) =>
+    "${standardizeWindSpeed(windSpeed, windSpeedMeansure)} ${windSpeedMeansure == WindSpeedMeansure.kmPerS ? 'km/h' : 'm/s'}";
+
 class Setting extends Equatable {
   final TemperatureMeansure temperatureMeansure;
   final WindSpeedMeansure windSpeedMeansure;

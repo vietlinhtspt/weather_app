@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:weather_app/blocs/weather_bloc.dart';
 import 'package:weather_app/events/weather_event.dart';
+import 'package:weather_app/models/setting_model.dart';
 import 'package:weather_app/models/weather_model.dart';
 import 'package:weather_app/pages/gradientIcon.dart';
 
@@ -11,8 +12,10 @@ import 'detail_info_item.dart';
 
 class SuggestItem extends StatelessWidget {
   final Weather weather;
+  final Setting setting;
 
-  SuggestItem({Key key, @required this.weather}) : super(key: key);
+  SuggestItem({Key key, @required this.weather, @required this.setting})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +48,8 @@ class SuggestItem extends StatelessWidget {
 
                 if (this.weather.temp != null) {
                   return Text(
-                    "${this.weather.temp.round()}°C",
+                    formatedTemperature(this.weather.temp.round(),
+                        this.setting.temperatureMeansure),
                     style: Theme.of(context).textTheme.headline5,
                   );
                 } else {
@@ -119,7 +123,8 @@ class SuggestItem extends StatelessWidget {
                       size: 14,
                       color: Colors.blueGrey[600],
                     ),
-                    title: "${this.weather.windSpeed.round()} km/h",
+                    title: formatedWindSpeed(this.weather.windSpeed.round(),
+                        this.setting.windSpeedMeansure),
                     fontSize: 14,
                     margin: EdgeInsets.only(right: 5),
                   );

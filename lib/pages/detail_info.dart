@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:weather_app/models/setting_model.dart';
 import 'package:weather_app/models/weather_model.dart';
 import 'package:weather_app/pages/detail_info_item.dart';
 
 class DetailInfo extends StatelessWidget {
   final Weather weather;
-  const DetailInfo({Key key, this.weather}) : super(key: key);
+  final Setting setting;
+  const DetailInfo({Key key, @required this.weather, @required this.setting})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +55,8 @@ class DetailInfo extends StatelessWidget {
                 color: Colors.blueGrey[600],
                 size: 30,
               ),
-              title: "${this.weather.windSpeed.round().toString()} km/h",
+              title: formatedWindSpeed(this.weather.windSpeed.round(),
+                  this.setting.windSpeedMeansure),
             );
           } else {
             return SizedBox(
