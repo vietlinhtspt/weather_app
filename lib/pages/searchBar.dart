@@ -2,11 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:weather_app/blocs/weather_bloc.dart';
 import 'package:weather_app/blocs/weather_search_bloc.dart';
-import 'package:weather_app/events/weather_event.dart';
 import 'package:weather_app/events/weather_search_event.dart';
-import 'package:weather_app/pages/gradientIcon.dart';
+import 'package:weather_app/pages/gradient_icon.dart';
 
 class SearchBar extends StatelessWidget {
   final _debouncer = Debouncer(milliseconds: 1000);

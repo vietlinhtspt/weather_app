@@ -44,7 +44,7 @@ class Weather extends Equatable {
       this.timezone,
       this.airPressure});
   @override
-  // TODO: implement props
+  
   List<Object> get props => [
         weatherCondition,
         formattedCondition,

@@ -15,6 +15,7 @@ ThemeData lightThemeData(BuildContext context) {
 ThemeData darkThemeData(BuildContext context) {
   return ThemeData.dark().copyWith(
     primaryColor: kPrimaryColor,
+    cardColor: Colors.grey[300],
     scaffoldBackgroundColor: Colors.black,
     shadowColor: Colors.black.withOpacity(0.5),
     textTheme: GoogleFonts.interTextTheme(Theme.of(context).textTheme)

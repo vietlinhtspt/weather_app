@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:weather_app/pages/gradientIcon.dart';
+import 'package:weather_app/pages/gradient_icon.dart';
+
 
 class SunItem extends StatelessWidget {
-  Icon icon;
-  Color startGradientColor;
-  Color endGradientColor;
-  String title;
-  SunItem(
+  final Icon icon;
+  final Color startGradientColor;
+  final Color endGradientColor;
+  final String title;
+  const SunItem(
       {Key key,
       @required this.icon,
       @required this.title,

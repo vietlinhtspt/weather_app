@@ -1,16 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:weather_app/blocs/setting_bloc.dart';
-import 'package:weather_app/blocs/weather_bloc.dart';
 import 'package:weather_app/blocs/weather_user_bloc.dart';
 import 'package:weather_app/events/setting_event.dart';
-import 'package:weather_app/events/weather_event.dart';
-import 'package:tiengviet/tiengviet.dart';
 import 'package:weather_app/events/weather_user_event.dart';
 import 'package:weather_app/models/setting_model.dart';
-import 'package:weather_app/models/weather_model.dart';
-import 'package:weather_app/pages/detail_info.dart';
-import 'package:weather_app/pages/gradientIcon.dart';
 import 'package:weather_app/pages/setting_item.dart';
 import 'package:weather_app/pages/weather_user_info.dart';
 import 'package:weather_app/states/setting_state.dart';
@@ -86,7 +80,9 @@ class _SettingPageState extends State<SettingPage> {
                 if (weatherUserState is WeatherStateSuccess) {
                   return BlocBuilder<SettingBloc, SettingState>(
                     builder: (context, settingState) {
-                      return WeatherUserInfo(weather: weatherUserState.weather, setting: settingState.setting);
+                      return WeatherUserInfo(
+                          weather: weatherUserState.weather,
+                          setting: settingState.setting);
                     },
                   );
                 } else if (weatherUserState is WeatherStateInitial) {

@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:weather_app/blocs/setting_bloc.dart';
 import 'package:weather_app/blocs/weather_bloc.dart';
 import 'package:weather_app/pages/detail_info.dart';
-import 'package:weather_app/pages/gradientIcon.dart';
+import 'package:weather_app/pages/gradient_icon.dart';
 import 'package:weather_app/pages/main_info.dart';
 import 'package:weather_app/pages/sun_info.dart';
 import 'package:weather_app/pages/today_info.dart';
@@ -19,7 +19,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final List<String> week_info = [
+  final List<String> weekInfo = [
     "Monday",
     "Tueday",
     "Wednesday",
@@ -54,8 +54,8 @@ class _HomePageState extends State<HomePage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         MainInfo(
-                          weather: weatherState.weather, setting: settingState.setting
-                        ),
+                            weather: weatherState.weather,
+                            setting: settingState.setting),
                         SizedBox(height: 50),
                         DetailInfo(
                           weather: weatherState.weather,
@@ -76,7 +76,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                         TodayInfo(),
                         Column(
-                          children: this.week_info.map((item) {
+                          children: this.weekInfo.map((item) {
                             return Container(
                               margin: EdgeInsets.symmetric(
                                   vertical: 10, horizontal: 19),

@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:weather_app/blocs/setting_bloc.dart';
-import 'package:weather_app/blocs/weather_bloc.dart';
 import 'package:weather_app/blocs/weather_search_bloc.dart';
 import 'package:weather_app/pages/searchBar.dart';
-import 'package:weather_app/pages/suggestItem.dart';
+import 'package:weather_app/pages/suggest_item.dart';
 import 'package:weather_app/states/setting_state.dart';
 import 'package:weather_app/states/weather_search_state.dart';
 import 'package:weather_app/states/weather_state.dart';

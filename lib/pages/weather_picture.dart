@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:weather_app/pages/gradientIcon.dart';
+import 'package:weather_app/pages/gradient_icon.dart';
 
 class WeatherPicture extends StatelessWidget {
   const WeatherPicture({

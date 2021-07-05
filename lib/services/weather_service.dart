@@ -5,10 +5,10 @@ import 'package:http/http.dart' as http;
 import 'package:weather_app/models/weather_model.dart';
 
 const baseUrl = 'https://www.metaweather.com';
-final locationUrl = (city) => '${baseUrl}/api/location/search/?query=${city}';
-final weatherUrl = (locationId) => '${baseUrl}/api/location/${locationId}';
+final locationUrl = (city) => '$baseUrl/api/location/search/?query=$city';
+final weatherUrl = (locationId) => '$baseUrl/api/location/$locationId';
 final locationSearchUrl =
-    (latt, long) => '${baseUrl}/api/location/search/?lattlong=$latt,$long';
+    (latt, long) => '$baseUrl/api/location/search/?lattlong=$latt,$long';
 
 class WeatherServices {
   final http.Client httpClient;
@@ -20,7 +20,7 @@ class WeatherServices {
       final cities = jsonDecode(response.body) as List;
       return (cities.first)['woeid'] ?? Map();
     } else {
-      throw Exception('Error getting location id of : ${city}');
+      throw Exception('Error getting location id of : $city');
     }
   }
 
@@ -28,7 +28,7 @@ class WeatherServices {
   Future<Weather> fetchWeather(int locationId) async {
     final response = await this.httpClient.get(weatherUrl(locationId));
     if (response.statusCode != 200) {
-      throw Exception('Error getting weather from locationId: ${locationId}');
+      throw Exception('Error getting weather from locationId: $locationId');
     }
     final weatherJson = jsonDecode(utf8.decode(response.bodyBytes));
     return Weather.fromJson(weatherJson);
@@ -47,7 +47,7 @@ class WeatherServices {
           cities.map((e) => Weather.fromSearchResult(e)).toList();
       return weathers ?? List<Weather>();
     } else {
-      throw Exception('Error getting location id of : ${city}');
+      throw Exception('Error getting location id of : $city');
     }
   }
 

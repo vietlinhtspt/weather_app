@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:weather_app/models/setting_model.dart';
 import 'package:weather_app/models/weather_model.dart';
 import 'package:weather_app/pages/detail_info.dart';
-import 'package:weather_app/pages/gradientIcon.dart';
+import 'package:weather_app/pages/gradient_icon.dart';
 import 'package:weather_app/pages/user_location.dart';
-import 'package:weather_app/models/setting_model.dart';
 
 class WeatherUserInfo extends StatelessWidget {
   final Weather weather;

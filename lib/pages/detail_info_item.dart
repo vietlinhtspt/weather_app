@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 class DetailInfoItem extends StatelessWidget {
-  Icon icon;
-  String title;
-  double fontSize;
-  EdgeInsets margin;
-  DetailInfoItem(
+  final Icon icon;
+  final String title;
+  final double fontSize;
+  final EdgeInsets margin;
+  const DetailInfoItem(
       {Key key,
       @required this.icon,
       @required this.title,

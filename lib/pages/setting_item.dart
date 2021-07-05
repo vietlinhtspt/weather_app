@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:weather_app/pages/setting_detail.dart';
 
 class SettingItem extends StatefulWidget {
-  String title;
-  String meansure;
-  List<String> optionNames;
+  final String title;
+  final String meansure;
+  final List<String> optionNames;
   int defaultIndex;
   final Function onSelect;
 

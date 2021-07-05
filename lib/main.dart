@@ -5,7 +5,7 @@ import 'package:weather_app/blocs/setting_bloc.dart';
 import 'package:weather_app/blocs/weather_bloc.dart';
 import 'package:weather_app/blocs/weather_user_bloc.dart';
 import 'package:weather_app/blocs/weather_search_bloc.dart';
-import 'package:weather_app/pages/gradientIcon.dart';
+import 'package:weather_app/pages/gradient_icon.dart';
 import 'package:weather_app/pages/home_page.dart';
 import 'package:weather_app/pages/search_page.dart';
 import 'package:weather_app/pages/setting_page.dart';
@@ -45,7 +45,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MainPage extends StatefulWidget {
-  int selectedIndex;
+  final int selectedIndex;
   MainPage({Key key, this.selectedIndex = 0}) : super(key: key);
 
   @override
