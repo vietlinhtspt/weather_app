@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:weather_app/blocs/setting_bloc.dart';
 import 'package:weather_app/blocs/weather_bloc.dart';
 import 'package:weather_app/blocs/weather_user_bloc.dart';
+import 'package:weather_app/events/setting_event.dart';
 import 'package:weather_app/events/weather_event.dart';
 import 'package:tiengviet/tiengviet.dart';
 import 'package:weather_app/events/weather_user_event.dart';
+import 'package:weather_app/models/setting_model.dart';
 import 'package:weather_app/models/weather_model.dart';
 import 'package:weather_app/pages/detail_info.dart';
 import 'package:weather_app/pages/gradientIcon.dart';
 import 'package:weather_app/pages/setting_item.dart';
+import 'package:weather_app/pages/weather_user_info.dart';
+import 'package:weather_app/states/setting_state.dart';
 import 'package:weather_app/states/weather_state.dart';
 import 'package:location/location.dart';
 
@@ -61,6 +66,14 @@ class _SettingPageState extends State<SettingPage> {
     });
   }
 
+  List<String> enumToList<T>(List<T> enumValues, var formatedValues) {
+    List<String> listValues = List<String>();
+    for (var value in enumValues) {
+      listValues.add(formatedValues[value]);
+    }
+    return listValues;
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<WeatherUserBloc, WeatherState>(
@@ -100,113 +113,69 @@ class _SettingPageState extends State<SettingPage> {
                   );
                 }
               }()),
-              SettingItem(
-                title: "Temperature",
-                meansure: "Celcius",
-                optionNames: [
-                  "Celcius",
-                  "Fahrenheit",
-                ],
+              BlocBuilder<SettingBloc, SettingState>(
+                builder: (context, settingState) {
+                  return SettingItem(
+                    title: "Temperature",
+                    meansure: formatedTemperatureMeansure[
+                        settingState.setting.temperatureMeansure],
+                    optionNames: enumToList<TemperatureMeansure>(
+                        TemperatureMeansure.values,
+                        formatedTemperatureMeansure),
+                    defaultIndex:
+                        settingState.setting.temperatureMeansure.index,
+                    onSelect: (index) {
+                      BlocProvider.of<SettingBloc>(context).add(
+                          SettingEventUpdate(
+                              setting: settingState.setting.copyWithChange(
+                                  newTemperatureMeansure:
+                                      TemperatureMeansure.values[index])));
+                    },
+                  );
+                },
               ),
-              SettingItem(
-                title: "Wind Speed",
-                meansure: "m/s",
-                optionNames: [
-                  "m/s",
-                  "km/h",
-                ],
+              BlocBuilder<SettingBloc, SettingState>(
+                builder: (context, settingState) {
+                  return SettingItem(
+                    title: "Wind Speed",
+                    meansure: formatedWindSpeedMeansure[
+                        settingState.setting.windSpeedMeansure],
+                    optionNames: enumToList<WindSpeedMeansure>(
+                        WindSpeedMeansure.values, formatedWindSpeedMeansure),
+                    defaultIndex: settingState.setting.windSpeedMeansure.index,
+                    onSelect: (index) {
+                      BlocProvider.of<SettingBloc>(context).add(
+                          SettingEventUpdate(
+                              setting: settingState.setting.copyWithChange(
+                                  newWindSpeedMeansure:
+                                      WindSpeedMeansure.values[index])));
+                    },
+                  );
+                },
               ),
-              SettingItem(
-                title: "Source",
-                meansure: "weather.gov",
-                optionNames: ["weather.gov", "weather.vn", "weather.com"],
+              BlocBuilder<SettingBloc, SettingState>(
+                builder: (context, settingState) {
+                  return SettingItem(
+                    title: "Source",
+                    meansure: formatedSourceDataMeansure[
+                        settingState.setting.sourceDataMeansure],
+                    optionNames: enumToList<SourceDataMeansure>(
+                        SourceDataMeansure.values, formatedSourceDataMeansure),
+                    defaultIndex: settingState.setting.sourceDataMeansure.index,
+                    onSelect: (index) {
+                      BlocProvider.of<SettingBloc>(context).add(
+                          SettingEventUpdate(
+                              setting: settingState.setting.copyWithChange(
+                                  newSourceDataMeansure:
+                                      SourceDataMeansure.values[index])));
+                    },
+                  );
+                },
               )
             ],
           ),
         );
       },
-    );
-  }
-}
-
-class WeatherUserInfo extends StatelessWidget {
-  final Weather weather;
-  const WeatherUserInfo({Key key, @required this.weather})
-      : assert(weather != null),
-        super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        UserLocation(weather: weather),
-        Container(
-          margin: EdgeInsets.all(20),
-          child: GradientIcon(
-              icon: Icon(
-            Icons.circle,
-            size: 170,
-          )),
-        ),
-        Container(
-          padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-              color: Colors.deepPurple[600]),
-          child: Text(
-            "${this.weather.formattedCondition}",
-            style:
-                TextStyle(color: Colors.white.withOpacity(0.7), fontSize: 15),
-          ),
-        ),
-        Container(
-          margin: EdgeInsets.symmetric(vertical: 15),
-          child: Text(
-            "${this.weather.temp.round()}°C",
-            style: Theme.of(context).textTheme.headline5.copyWith(fontSize: 50),
-          ),
-        ),
-        DetailInfo(
-          weather: weather,
-        )
-      ],
-    );
-  }
-}
-
-class UserLocation extends StatelessWidget {
-  final Weather weather;
-  const UserLocation({Key key, this.weather}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    // print(TiengViet.parse("Hà Nội"));
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.location_on,
-              color: Colors.grey,
-            ),
-            Text(
-              "Your Location Now",
-              style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold),
-            )
-          ],
-        ),
-        Padding(padding: EdgeInsets.only(top: 10)),
-        Column(
-          children: [
-            Text(
-              "${this.weather.location}, ${this.weather.timezone}",
-              style: Theme.of(context).textTheme.headline6,
-            )
-          ],
-        )
-      ],
     );
   }
 }

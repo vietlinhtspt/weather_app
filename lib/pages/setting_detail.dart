@@ -3,9 +3,15 @@ import 'package:flutter/material.dart';
 class SettingDetail extends StatefulWidget {
   final List<String> optionName;
   final String title;
+  int defaultIndex;
+  final Function onSelect;
   // final Function onSelectOption; @required this.onSelectOption
-  const SettingDetail(
-      {Key key, @required this.title, @required this.optionName})
+  SettingDetail(
+      {Key key,
+      @required this.title,
+      @required this.optionName,
+      @required this.defaultIndex,
+      @required this.onSelect})
       : super(key: key);
 
   @override
@@ -13,7 +19,6 @@ class SettingDetail extends StatefulWidget {
 }
 
 class _SettingDetailState extends State<SettingDetail> {
-  int selectedIndex = 1;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,11 +35,11 @@ class _SettingDetailState extends State<SettingDetail> {
                 activeColor: Colors.deepPurple,
                 title: Text(widget.optionName[index]),
                 value: index,
-                groupValue: selectedIndex,
+                groupValue: widget.defaultIndex,
                 onChanged: (int newIndex) {
-                  print("selected $newIndex");
+                  widget.onSelect(newIndex);
                   setState(() {
-                    selectedIndex = newIndex;
+                    widget.defaultIndex = newIndex;
                   });
                 },
               );

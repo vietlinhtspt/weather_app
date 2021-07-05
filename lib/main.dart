@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:weather_app/blocs/bloc_observer.dart';
+import 'package:weather_app/blocs/setting_bloc.dart';
 import 'package:weather_app/blocs/weather_bloc.dart';
 import 'package:weather_app/blocs/weather_user_bloc.dart';
 import 'package:weather_app/blocs/weather_search_bloc.dart';
@@ -36,7 +37,8 @@ class MyApp extends StatelessWidget {
         BlocProvider<WeatherUserBloc>(
           create: (context) =>
               WeatherUserBloc(weatherServices: weatherServices),
-        )
+        ),
+        BlocProvider<SettingBloc>(create: (context) => SettingBloc()),
       ], child: MainPage()),
     );
   }
