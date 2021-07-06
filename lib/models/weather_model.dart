@@ -1,51 +1,42 @@
 import 'package:equatable/equatable.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+// import 'package:hive_flutter/hive_flutter.dart';
 
-enum WeatherCondition {
-  snow,
-  sleet,
-  hail,
-  thunderstorm,
-  heavyRain,
-  lightRain,
-  showers,
-  heavyCloud,
-  lightCloud,
-  clear,
-  unknown
-}
+part 'weather_model.g.dart';
 
-class FutureWeather {
-  final DateTime dateTime;
-  final String formattedCondition;
+@HiveType(typeId: 1)
+class Weather extends HiveObject {
   final WeatherCondition weatherCondition;
-  final double minTemp;
-  final double maxTemp;
-  const FutureWeather(
-      {this.dateTime,
-      this.formattedCondition,
-      this.weatherCondition,
-      this.maxTemp,
-      this.minTemp});
-}
 
-class Weather extends Equatable {
-  final WeatherCondition weatherCondition;
   final String formattedCondition;
+
   final double minTemp;
+
   final double temp;
+
   final double maxTemp;
+  @HiveField(0)
   final int locationId;
+
   final String created;
+
   final double windSpeed;
+
   final DateTime lastUpdated;
+  @HiveField(1)
   final String location;
+
   final int humidity;
+  @HiveField(2)
   final String timezone;
+
   final double airPressure;
+
   final List<FutureWeather> futureWeathers;
 
   //constructor
-  const Weather(
+  Weather(
       {this.weatherCondition,
       this.formattedCondition,
       this.minTemp,
@@ -165,4 +156,65 @@ consolidated_weather": [
     };
     return map[inputString] ?? WeatherCondition.unknown;
   }
+
+  Weather copyWith({
+    final WeatherCondition weatherCondition,
+    final String formattedCondition,
+    final double minTemp,
+    final double temp,
+    final double maxTemp,
+    final int locationId,
+    final String created,
+    final double windSpeed,
+    final DateTime lastUpdated,
+    final String location,
+    final int humidity,
+    final String timezone,
+    final double airPressure,
+    final List<FutureWeather> futureWeathers,
+  }) {
+    return Weather(
+        weatherCondition: weatherCondition ?? this.weatherCondition,
+        formattedCondition: formattedCondition ?? this.formattedCondition,
+        minTemp: minTemp ?? this.minTemp,
+        temp: temp ?? this.temp,
+        maxTemp: maxTemp ?? this.maxTemp,
+        locationId: locationId ?? this.locationId,
+        created: created ?? this.created,
+        windSpeed: windSpeed ?? this.windSpeed,
+        lastUpdated: lastUpdated ?? this.lastUpdated,
+        location: location ?? this.location,
+        humidity: humidity ?? this.humidity,
+        timezone: timezone ?? this.timezone,
+        airPressure: airPressure ?? this.airPressure,
+        futureWeathers: futureWeathers ?? this.futureWeathers);
+  }
+}
+
+enum WeatherCondition {
+  snow,
+  sleet,
+  hail,
+  thunderstorm,
+  heavyRain,
+  lightRain,
+  showers,
+  heavyCloud,
+  lightCloud,
+  clear,
+  unknown
+}
+
+class FutureWeather {
+  final DateTime dateTime;
+  final String formattedCondition;
+  final WeatherCondition weatherCondition;
+  final double minTemp;
+  final double maxTemp;
+  const FutureWeather(
+      {this.dateTime,
+      this.formattedCondition,
+      this.weatherCondition,
+      this.maxTemp,
+      this.minTemp});
 }

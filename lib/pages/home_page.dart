@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive/hive.dart';
 import 'package:weather_app/blocs/setting_bloc.dart';
 import 'package:weather_app/blocs/weather_bloc.dart';
+import 'package:weather_app/events/weather_event.dart';
 import 'package:weather_app/models/setting_model.dart';
 import 'package:weather_app/models/weather_model.dart';
 import 'package:weather_app/pages/detail_info.dart';
-import 'package:weather_app/pages/gradient_icon.dart';
 import 'package:weather_app/pages/main_info.dart';
 import 'package:weather_app/pages/sun_info.dart';
 import 'package:weather_app/pages/today_info.dart';
@@ -21,11 +22,36 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  Weather storedweather;
+
+  void addItem(Weather item) {
+    var box = Hive.box<Weather>('weather');
+    if (box.isNotEmpty) {
+      box.putAt(0, item);
+    } else {
+      box.add(item);
+    }
+  }
+
+  void getItem() async {
+    final box = await Hive.openBox<Weather>('weather');
+    if (box != null) {
+      if (box.isNotEmpty) {
+        storedweather = box.getAt(0);
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<WeatherBloc, WeatherState>(
         builder: (context, weatherState) {
       if (weatherState is WeatherStateInitial) {
+        getItem();
+        if (this.storedweather != null) {
+          BlocProvider.of<WeatherBloc>(context)
+              .add(WeatherEventSet(weather: storedweather));
+        }
         return Expanded(
           child: Center(
             child: Text("Please select a location first"),
@@ -37,6 +63,7 @@ class _HomePageState extends State<HomePage> {
       } else if (weatherState is WeatherStateSuccess) {
         return BlocBuilder<SettingBloc, SettingState>(
           builder: (context, settingState) {
+            addItem(weatherState.weather);
             return Container(
               color: Theme.of(context).scaffoldBackgroundColor,
               child: Stack(children: [
@@ -138,7 +165,7 @@ class WeekItemInfo extends StatelessWidget {
                     borderRadius: BorderRadius.circular(20)),
                 child: Text(
                   this.futureWeather.formattedCondition,
-                  style: TextStyle(fontSize: 11, color: Colors.white),
+                  style: TextStyle(fontSize: 8, color: Colors.white),
                 ),
               );
             } else {

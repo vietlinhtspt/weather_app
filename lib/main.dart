@@ -1,10 +1,14 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive/hive.dart';
 import 'package:weather_app/blocs/bloc_observer.dart';
 import 'package:weather_app/blocs/setting_bloc.dart';
 import 'package:weather_app/blocs/weather_bloc.dart';
 import 'package:weather_app/blocs/weather_user_bloc.dart';
 import 'package:weather_app/blocs/weather_search_bloc.dart';
+import 'package:weather_app/models/weather_model.dart';
 import 'package:weather_app/pages/gradient_icon.dart';
 import 'package:weather_app/pages/home_page.dart';
 import 'package:weather_app/pages/search_page.dart';
@@ -12,9 +16,15 @@ import 'package:weather_app/pages/setting_page.dart';
 import 'package:weather_app/services/weather_service.dart';
 import 'package:http/http.dart' as http;
 import 'package:weather_app/theme.dart';
+import 'package:path_provider/path_provider.dart' as pathProvider;
 
-void main() {
+Future<void> main() async {
   Bloc.observer = WeatherBlocObserver();
+  WidgetsFlutterBinding.ensureInitialized();
+  Directory directory = await pathProvider.getApplicationDocumentsDirectory();
+  Hive
+    ..init(directory.path)
+    ..registerAdapter(WeatherAdapter());
   runApp(MyApp());
 }
 

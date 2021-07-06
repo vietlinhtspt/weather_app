@@ -55,9 +55,11 @@ class _SettingPageState extends State<SettingPage> {
 
   void getLocationData() async {
     locationData = await widget.getLocation();
-    setState(() {
-      locationData = locationData;
-    });
+    if (mounted) {
+      setState(() {
+        locationData = locationData;
+      });
+    }
   }
 
   List<String> enumToList<T>(List<T> enumValues, var formatedValues) {
